@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 
 import net.sn0wix_.incounter.item.ModItemGroup;
 import net.sn0wix_.incounter.item.ModItems;
+import net.sn0wix_.incounter.sounds.ModSounds;
 import net.sn0wix_.incounter.util.ModRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,5 +18,6 @@ public class Incounter implements ModInitializer {
 		ModItemGroup.registerModItemGroups();
 		ModItems.registerModItems();
 		ModRegistries.registerModStuffs();
+		ModSounds.registerModSounds();
 	}
 }

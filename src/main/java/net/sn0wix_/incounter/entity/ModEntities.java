@@ -12,6 +12,6 @@ import net.sn0wix_.incounter.entity.custom.StalkerEntity;
 
 public class ModEntities {
     public static final EntityType<StalkerEntity> STALKER = Registry.register(Registries.ENTITY_TYPE, new Identifier(Incounter.MOD_ID, "stalker"),
-            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, StalkerEntity::new).dimensions(EntityDimensions.fixed(0.5f, 3f)).build());
+            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, StalkerEntity::new).dimensions(EntityDimensions.fixed(0.8f, 4.5f)).build());
 
 }

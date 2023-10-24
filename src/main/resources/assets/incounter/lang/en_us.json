@@ -1,5 +1,8 @@
 {
   "incounter.item_tab": "Incouter Items",
 
-  "entity.incounter.stalker": "The Stalker"
+  "item.incounter.stalker_spawn_egg": "Stalker Spawn Egg",
+
+  "entity.incounter.stalker": "The Stalker",
+  "sounds.incounter.jumpscare": "Screaming"
 }

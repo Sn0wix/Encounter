@@ -1,25 +1,41 @@
 package net.sn0wix_.incounter.entity.custom;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.world.World;
 import net.sn0wix_.incounter.Incounter;
+import net.sn0wix_.incounter.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
+
+import java.util.Objects;
+import java.util.UUID;
 
 public class StalkerEntity extends HostileEntity implements GeoEntity {
     public static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.stalker.idle");
@@ -28,16 +44,20 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
     public static final RawAnimation WAKEUP = RawAnimation.begin().thenPlay("animation.stalker.wakeup");
 
 
-    private int screamTicksLeft = 0;
+    public static final TrackedData<Boolean> SLEEPING = DataTracker.registerData(StalkerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+
+    private int scareTicksLeft = 0;
+    private LivingEntity scaring;
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
     public StalkerEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
+        this.dataTracker.startTracking(SLEEPING, true);
     }
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(8, new WanderAroundFarGoal(this, 1.0));
+        this.goalSelector.add(5, new WanderAroundFarGoal(this, 1.0));
         this.goalSelector.add(1, new MeleeAttackGoal(this, 1, false));
 
         this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
@@ -49,22 +69,21 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 20)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f);
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32f);
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this,"controler", 2, this::predicate)
+        controllerRegistrar.add(new AnimationController<>(this, "controller", 2, this::predicate)
                 .triggerableAnim("scare", SCARE).triggerableAnim("wakeup", WAKEUP));
     }
 
     private PlayState predicate(AnimationState<StalkerEntity> state) {
         if (state.isMoving()) {
-            Incounter.LOGGER.info("walk");
             return state.setAndContinue(WALK);
         }
 
-        Incounter.LOGGER.info("idle");
         return state.setAndContinue(IDLE);
     }
 
@@ -77,18 +96,49 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
     public void tick() {
         super.tick();
         if (!this.getWorld().isClient) {
-            if (this.screamTicksLeft >= 1) {
-                screamTicksLeft--;
 
-                if (screamTicksLeft <= 0) {
+            if (this.scareTicksLeft >= 1) {
+                scareTicksLeft--;
+
+                if (scareTicksLeft == 35) {
+                    playSound(ModSounds.JUMPSCARE, 10, 1);
+                }
+
+                if (scareTicksLeft == 10) {
+                    scaring.damage(getDamageSources().magic(), Float.MAX_VALUE);
+                }
+
+                if (scaring != null) {
+                    this.getLookControl().lookAt(scaring);
+                    this.getNavigation().stop();
+                }
+
+                if (scareTicksLeft <= 0) {
                     stopScreaming();
+                }
+            }
+
+            if (scaring == null || scaring.isDead()) {
+                if (this.scareTicksLeft <= 0 && this.getTarget() instanceof PlayerEntity && this.getWorld().getOtherEntities(this, this.getBoundingBox().expand(2, 0, 2)).contains(getTarget())) {
+                    Incounter.LOGGER.info(this.getTarget().getName().getString());
+                    this.scareTicksLeft = 40;
+                    startScreaming();
                 }
             }
         }
     }
 
     private void stopScreaming() {
+        scaring.damage(getDamageSources().magic(), Float.MAX_VALUE);
+        scaring = null;
+    }
 
+
+    private void startScreaming() {
+        scaring = this.getTarget();
+        this.triggerAnim("controller", "scare");
+
+        scaring.setYaw(this.getYaw() / (180F / (float) Math.PI));
     }
 
     @Override
@@ -98,9 +148,20 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        if (source.isOf(DamageTypes.OUT_OF_WORLD)) {
-            return super.damage(source, amount);
+        if (source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            return super.damage(source, Float.MAX_VALUE);
         }
         return false;
+    }
+
+    @Override
+    public boolean cannotDespawn() {
+        return true;
+    }
+
+    @Override
+    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
+        super.onSpawnPacket(packet);
+        this.dataTracker.set(SLEEPING, true);
     }
 }
