@@ -2,8 +2,6 @@ package net.sn0wix_.incounter.entity.custom;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,29 +11,23 @@ import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.world.World;
-import net.sn0wix_.incounter.Incounter;
+import net.sn0wix_.incounter.networking.ModPackets;
 import net.sn0wix_.incounter.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
-
-import java.util.Objects;
-import java.util.UUID;
 
 public class StalkerEntity extends HostileEntity implements GeoEntity {
     public static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.stalker.idle");
@@ -45,9 +37,7 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
 
 
     public static final TrackedData<Boolean> SLEEPING = DataTracker.registerData(StalkerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-
     private int scareTicksLeft = 0;
-    private LivingEntity scaring;
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
     public StalkerEntity(EntityType<? extends HostileEntity> entityType, World world) {
@@ -103,46 +93,28 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
                 if (scareTicksLeft == 35) {
                     playSound(ModSounds.JUMPSCARE, 10, 1);
                 }
-
-                if (scareTicksLeft == 10) {
-                    scaring.damage(getDamageSources().magic(), Float.MAX_VALUE);
-                }
-
-                if (scaring != null) {
-                    this.getLookControl().lookAt(scaring);
-                    this.getNavigation().stop();
-                }
-
-                if (scareTicksLeft <= 0) {
-                    stopScreaming();
-                }
-            }
-
-            if (scaring == null || scaring.isDead()) {
-                if (this.scareTicksLeft <= 0 && this.getTarget() instanceof PlayerEntity && this.getWorld().getOtherEntities(this, this.getBoundingBox().expand(2, 0, 2)).contains(getTarget())) {
-                    Incounter.LOGGER.info(this.getTarget().getName().getString());
-                    this.scareTicksLeft = 40;
-                    startScreaming();
-                }
             }
         }
     }
 
-    private void stopScreaming() {
-        scaring.damage(getDamageSources().magic(), Float.MAX_VALUE);
-        scaring = null;
-    }
-
-
-    private void startScreaming() {
-        scaring = this.getTarget();
-        this.triggerAnim("controller", "scare");
-
-        scaring.setYaw(this.getYaw() / (180F / (float) Math.PI));
-    }
-
     @Override
     public boolean tryAttack(Entity target) {
+        if (target instanceof PlayerEntity && !getWorld().isClient && scareTicksLeft == 0) {
+            double squaredDistance = this.squaredDistanceTo(target.getX(), target.getY(), target.getZ());
+            double d = this.getSquaredMaxAttackDistance((LivingEntity) target);
+
+            if (squaredDistance <= d) {
+                this.getNavigation().stop();
+                this.scareTicksLeft = 40;
+                this.getWorld().getPlayers().forEach(player -> {
+                    if (!player.isSpectator()) {
+                        ServerPlayNetworking.send((ServerPlayerEntity) player, ModPackets.LOCK_PLAYER, PacketByteBufs.create());
+                    }
+                });
+                this.triggerAnim("controller","scare");
+                return true;
+            }
+        }
         return false;
     }
 
@@ -163,5 +135,9 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
     public void onSpawnPacket(EntitySpawnS2CPacket packet) {
         super.onSpawnPacket(packet);
         this.dataTracker.set(SLEEPING, true);
+    }
+
+    private double getSquaredMaxAttackDistance(LivingEntity entity) {
+        return this.getWidth() * 2.0F * this.getWidth() * 2.0F + entity.getWidth();
     }
 }
