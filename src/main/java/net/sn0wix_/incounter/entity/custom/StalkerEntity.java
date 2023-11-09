@@ -20,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.sn0wix_.incounter.networking.ModPackets;
 import net.sn0wix_.incounter.sounds.ModSounds;
@@ -92,6 +93,14 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
 
                 if (scareTicksLeft == 35) {
                     playSound(ModSounds.JUMPSCARE, 10, 1);
+                }
+
+                if (scareTicksLeft == 0) {
+                    this.getWorld().getPlayers().forEach(player -> {
+                        if (!player.isSpectator()) {
+                            ServerPlayNetworking.send((ServerPlayerEntity) player, ModPackets.UNLOCK_PLAYER, PacketByteBufs.create());
+                        }
+                    });
                 }
             }
         }
