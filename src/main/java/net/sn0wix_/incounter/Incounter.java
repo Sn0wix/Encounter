@@ -11,6 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Incounter implements ModInitializer {
+	//TODO 5 monsters
+	//TODO went block
+	//TODO (disable shift when cut sceene)
+
     public static final Logger LOGGER = LoggerFactory.getLogger("incounter");
 	public static final String MOD_ID = "incounter";
 

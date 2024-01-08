@@ -2,7 +2,9 @@ package net.sn0wix_.incounter.entity.custom;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
@@ -20,7 +22,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import net.sn0wix_.incounter.networking.ModPackets;
 import net.sn0wix_.incounter.sounds.ModSounds;
@@ -29,6 +33,8 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
+
+import java.util.List;
 
 public class StalkerEntity extends HostileEntity implements GeoEntity {
     public static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.stalker.idle");
@@ -90,20 +96,33 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
 
             if (this.scareTicksLeft >= 1) {
                 scareTicksLeft--;
+                this.getNavigation().stop();
 
                 if (scareTicksLeft == 35) {
-                    playSound(ModSounds.JUMPSCARE, 10, 1);
+                    playScareSound();
                 }
 
                 if (scareTicksLeft == 0) {
-                    this.getWorld().getPlayers().forEach(player -> {
-                        if (!player.isSpectator()) {
-                            ServerPlayNetworking.send((ServerPlayerEntity) player, ModPackets.UNLOCK_PLAYER, PacketByteBufs.create());
-                        }
-                    });
+                    this.getWorld().getPlayers().forEach(player -> ServerPlayNetworking.send((ServerPlayerEntity) player, ModPackets.UNLOCK_PLAYER, PacketByteBufs.create()));
                 }
             }
         }
+    }
+
+    private void scare() {
+        this.getWorld().getPlayers().forEach(player -> {
+            if (player instanceof ServerPlayerEntity serverPlayer && !serverPlayer.isSpectator()) {
+                serverPlayer.requestTeleport(this.getLookControl().getLookX() + 1, this.getEyeY() - 2, this.getLookControl().getLookZ() + 1);
+
+                //serverPlayer.requestTeleport(this.getX() * 2 - serverPlayer.getX(), this.getEyeY(), this.getZ() * 2 - serverPlayer.getZ());
+                serverPlayer.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, this.getEyePos());
+                serverPlayer.changeGameMode(GameMode.SPECTATOR);
+            }
+        });
+    }
+
+    private void playScareSound() {
+        playSound(ModSounds.JUMPSCARE, 10, 1);
     }
 
     @Override
@@ -115,12 +134,9 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
             if (squaredDistance <= d) {
                 this.getNavigation().stop();
                 this.scareTicksLeft = 40;
-                this.getWorld().getPlayers().forEach(player -> {
-                    if (!player.isSpectator()) {
-                        ServerPlayNetworking.send((ServerPlayerEntity) player, ModPackets.LOCK_PLAYER, PacketByteBufs.create());
-                    }
-                });
-                this.triggerAnim("controller","scare");
+                scare();
+                this.getWorld().getPlayers().forEach(player -> ServerPlayNetworking.send((ServerPlayerEntity) player, ModPackets.LOCK_PLAYER, PacketByteBufs.create()));
+                this.triggerAnim("controller", "scare");
                 return true;
             }
         }
@@ -132,6 +148,11 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
         if (source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             return super.damage(source, Float.MAX_VALUE);
         }
+
+        if (source.getSource() instanceof PlayerEntity player && player.isCreative()) {
+            return super.damage(source, Float.MAX_VALUE);
+        }
+
         return false;
     }
 

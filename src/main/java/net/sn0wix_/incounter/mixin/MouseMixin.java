@@ -12,16 +12,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(Mouse.class)
-public class MouseMixin {
+public abstract class MouseMixin {
     @Shadow
     @Final
     private MinecraftClient client;
 
-    @Inject(method = "updateMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;changeLookDirection(DD)V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
-    private void injectUpdate(CallbackInfo cir, double k, double l, double m) {
+    @Inject(method = "updateMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;changeLookDirection(DD)V", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
+    private void injectChangeLookDirection(CallbackInfo ci, double l, double k) {
         if (this.client.player != null && Variables.isPlayerLocked()) {
-            this.client.player.changeLookDirection(-k, -l * m);
-            cir.cancel();
+            this.client.player.changeLookDirection(0, 0);
+            ci.cancel();
         }
     }
 }
