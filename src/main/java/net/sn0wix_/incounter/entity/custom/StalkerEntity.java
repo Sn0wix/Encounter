@@ -101,6 +101,8 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
                 this.getNavigation().stop();
                 this.setMovementSpeed(0);
                 this.setVelocity(0,0,0);
+                scareLookVec = assignVec();
+                scareAll();
 
                 if (scareTicksLeft == 35) {
                     playScareSound();
@@ -116,10 +118,6 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
     }
 
     private Vec3d handleScareOffSet() {
-        /*double deltaX12 = getX() - scareLookVec.x;
-        double deltaZ12 = getZ() - scareLookVec.z;
-        double v12 = Math.sqrt((deltaX12 * deltaX12) + (deltaZ12 * deltaZ12));
-        double deltaX13 = (deltaX12 / v12) * 1;*/
         double deltaX = getX() - scareLookVec.x;
         double deltaZ = getZ() - scareLookVec.z;
 
@@ -133,11 +131,9 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
         Vec3d finalDest = handleScareOffSet();
 
         player.requestTeleport(finalDest.x, this.getEyeY() - player.getEyeHeight(EntityPose.STANDING) - 0.2, finalDest.z);
-        //player.requestTeleport(this.scareLookLocation.x + 1, scareLookLocation.y, this.scareLookLocation.z + 1);
-
-        //serverPlayer.requestTeleport(this.getLookControl().getLookX() + 1, this.getEyeY() - 2, this.getLookControl().getLookZ() + 1);
-        //serverPlayer.requestTeleport(this.getX() * 2 - serverPlayer.getX(), this.getEyeY(), this.getZ() * 2 - serverPlayer.getZ());
         player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, this.getEyePos());
+        player.setVelocity(0,0,0);
+        player.velocityDirty = true;
         player.changeGameMode(GameMode.SPECTATOR);
     }
 
@@ -162,7 +158,7 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
             if (squaredDistance <= d) {
                 this.getNavigation().stop();
                 this.scareTicksLeft = 40;
-                scareLookVec = new Vec3d(this.getLookControl().getLookX(), this.getEyeY() + 0.4, this.getLookControl().getLookZ());
+                scareLookVec = assignVec();
                 this.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, scareLookVec);
                 this.setNoGravity(true);
                 scareAll();
@@ -172,6 +168,10 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
             }
         }
         return false;
+    }
+
+    private Vec3d assignVec() {
+        return new Vec3d(this.getLookControl().getLookX(), this.getEyeY() + 0.4, this.getLookControl().getLookZ());
     }
 
     @Override

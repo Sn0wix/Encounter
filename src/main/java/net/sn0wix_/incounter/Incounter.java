@@ -14,6 +14,7 @@ public class Incounter implements ModInitializer {
 	//TODO 5 monsters
 	//TODO went block
 	//TODO (disable shift when cut sceene)
+	//TODO fix two keyboards not working when scaring
 	//TODO idea: seecret ratafak skin
 	//TODO idea: crawl key(x)
 
