@@ -14,8 +14,11 @@ public class Incounter implements ModInitializer {
 	//TODO 5 monsters
 	//TODO went block
 	//TODO (disable shift when cut sceene)
+	//TODO idea: seecret ratafak skin
+	//TODO idea: crawl key(x)
 
-    public static final Logger LOGGER = LoggerFactory.getLogger("incounter");
+
+	public static final Logger LOGGER = LoggerFactory.getLogger("incounter");
 	public static final String MOD_ID = "incounter";
 
 	@Override

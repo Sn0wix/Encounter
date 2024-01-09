@@ -4,7 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.sn0wix_.incounter.client.ClientTickEvent;
 import net.sn0wix_.incounter.entity.ModEntities;
-import net.sn0wix_.incounter.entity.client.stalker.StalkerRenderer;
+import net.sn0wix_.incounter.client.renderers.stalker.StalkerRenderer;
 import net.sn0wix_.incounter.networking.ModPackets;
 
 public class IncounterClient implements ClientModInitializer {

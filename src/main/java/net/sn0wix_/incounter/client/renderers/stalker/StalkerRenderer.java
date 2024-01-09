@@ -1,4 +1,4 @@
-package net.sn0wix_.incounter.entity.client.stalker;
+package net.sn0wix_.incounter.client.renderers.stalker;
 
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.util.Identifier;
@@ -12,6 +12,6 @@ public class StalkerRenderer extends GeoEntityRenderer<StalkerEntity> {
 
     @Override
     public Identifier getTextureLocation(StalkerEntity animatable) {
-        return StalkerModel.textureResource;
+        return StalkerModel.TEXTURE_RESOURCE;
     }
 }

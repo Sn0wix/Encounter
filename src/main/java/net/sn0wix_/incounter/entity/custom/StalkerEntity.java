@@ -22,8 +22,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import net.sn0wix_.incounter.networking.ModPackets;
@@ -34,8 +34,6 @@ import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInst
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 
-import java.util.List;
-
 public class StalkerEntity extends HostileEntity implements GeoEntity {
     public static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.stalker.idle");
     public static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.stalker.run");
@@ -44,6 +42,7 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
 
 
     public static final TrackedData<Boolean> SLEEPING = DataTracker.registerData(StalkerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private Vec3d scareLookVec;
     private int scareTicksLeft = 0;
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
@@ -93,30 +92,59 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
     public void tick() {
         super.tick();
         if (!this.getWorld().isClient) {
+            if (scareLookVec != null) {
+                this.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, scareLookVec);
+            }
 
             if (this.scareTicksLeft >= 1) {
                 scareTicksLeft--;
                 this.getNavigation().stop();
+                this.setMovementSpeed(0);
+                this.setVelocity(0,0,0);
 
                 if (scareTicksLeft == 35) {
                     playScareSound();
                 }
 
                 if (scareTicksLeft == 0) {
+                    this.scareLookVec = null;
+                    this.setNoGravity(false);
                     this.getWorld().getPlayers().forEach(player -> ServerPlayNetworking.send((ServerPlayerEntity) player, ModPackets.UNLOCK_PLAYER, PacketByteBufs.create()));
                 }
             }
         }
     }
 
-    private void scare() {
+    private Vec3d handleScareOffSet() {
+        /*double deltaX12 = getX() - scareLookVec.x;
+        double deltaZ12 = getZ() - scareLookVec.z;
+        double v12 = Math.sqrt((deltaX12 * deltaX12) + (deltaZ12 * deltaZ12));
+        double deltaX13 = (deltaX12 / v12) * 1;*/
+        double deltaX = getX() - scareLookVec.x;
+        double deltaZ = getZ() - scareLookVec.z;
+
+        double finalX = scareLookVec.x - (deltaX * 0.3);
+        double finalZ = scareLookVec.z - (deltaZ * 0.3);
+
+        return new Vec3d(finalX, 0, finalZ);
+    }
+
+    private void scareOne(ServerPlayerEntity player) {
+        Vec3d finalDest = handleScareOffSet();
+
+        player.requestTeleport(finalDest.x, this.getEyeY() - player.getEyeHeight(EntityPose.STANDING) - 0.2, finalDest.z);
+        //player.requestTeleport(this.scareLookLocation.x + 1, scareLookLocation.y, this.scareLookLocation.z + 1);
+
+        //serverPlayer.requestTeleport(this.getLookControl().getLookX() + 1, this.getEyeY() - 2, this.getLookControl().getLookZ() + 1);
+        //serverPlayer.requestTeleport(this.getX() * 2 - serverPlayer.getX(), this.getEyeY(), this.getZ() * 2 - serverPlayer.getZ());
+        player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, this.getEyePos());
+        player.changeGameMode(GameMode.SPECTATOR);
+    }
+
+    private void scareAll() {
         this.getWorld().getPlayers().forEach(player -> {
             if (player instanceof ServerPlayerEntity serverPlayer && !serverPlayer.isSpectator()) {
-                serverPlayer.requestTeleport(this.getLookControl().getLookX() + 1, this.getEyeY() - 2, this.getLookControl().getLookZ() + 1);
-
-                //serverPlayer.requestTeleport(this.getX() * 2 - serverPlayer.getX(), this.getEyeY(), this.getZ() * 2 - serverPlayer.getZ());
-                serverPlayer.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, this.getEyePos());
-                serverPlayer.changeGameMode(GameMode.SPECTATOR);
+                scareOne(serverPlayer);
             }
         });
     }
@@ -134,7 +162,10 @@ public class StalkerEntity extends HostileEntity implements GeoEntity {
             if (squaredDistance <= d) {
                 this.getNavigation().stop();
                 this.scareTicksLeft = 40;
-                scare();
+                scareLookVec = new Vec3d(this.getLookControl().getLookX(), this.getEyeY() + 0.4, this.getLookControl().getLookZ());
+                this.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, scareLookVec);
+                this.setNoGravity(true);
+                scareAll();
                 this.getWorld().getPlayers().forEach(player -> ServerPlayNetworking.send((ServerPlayerEntity) player, ModPackets.LOCK_PLAYER, PacketByteBufs.create()));
                 this.triggerAnim("controller", "scare");
                 return true;
