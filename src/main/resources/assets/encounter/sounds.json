@@ -1,0 +1,8 @@
+{
+  "jumpscare": {
+    "subtitle": "sounds.encounter.jumpscare",
+    "sounds": [
+      "encounter:jumpscare"
+    ]
+  }
+}
