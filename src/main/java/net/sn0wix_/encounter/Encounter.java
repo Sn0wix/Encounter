@@ -17,7 +17,8 @@ public class Encounter implements ModInitializer {
 	//TODO disable jump + command
 	//TODO fix scare math
 	//TODO idea: secret ratafak skin
-	//TODO idea: crawl key(x)
+	//TODO crawl key(x)
+	//TODO rename git repo to encounter
 
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Encounter.MOD_ID);
