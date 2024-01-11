@@ -1,9 +1,9 @@
-package net.sn0wix_.encounter.client;
+package net.sn0wix_.encounter.client.keyBindings;
 
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.sn0wix_.encounter.Encounter;
+import net.sn0wix_.encounter.common.Encounter;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyBindings {

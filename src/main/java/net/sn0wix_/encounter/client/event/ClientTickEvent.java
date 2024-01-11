@@ -3,9 +3,9 @@ package net.sn0wix_.encounter.client.event;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
-import net.sn0wix_.encounter.client.Variables;
+import net.sn0wix_.encounter.client.util.ClientVariables;
 
-import static net.sn0wix_.encounter.client.KeyBindings.crawlKey;
+import static net.sn0wix_.encounter.client.keyBindings.KeyBindings.crawlKey;
 
 public class ClientTickEvent {
     public static class EndClientTick implements ClientTickEvents.EndTick {
@@ -13,6 +13,10 @@ public class ClientTickEvent {
         public void onEndTick(MinecraftClient client) {
             stopMoving(client);
             handleKeyInputs(client);
+
+            if (client.player == null && ClientVariables.isPlayerLocked()) {
+                ClientVariables.unlockPlayer();
+            }
         }
 
         private static void handleKeyInputs(MinecraftClient client) {
@@ -31,9 +35,9 @@ public class ClientTickEvent {
     }
 
     public static void stopMoving(MinecraftClient client) {
-        if (client.player != null && Variables.isPlayerLocked()) {
-            if (Variables.getScarePos() != null) {
-                client.player.setPos(Variables.getScarePos().x, Variables.getScarePos().y, Variables.getScarePos().z);
+        if (client.player != null && ClientVariables.isPlayerLocked()) {
+            if (ClientVariables.getScarePos() != null) {
+                client.player.setPos(ClientVariables.getScarePos().x, ClientVariables.getScarePos().y, ClientVariables.getScarePos().z);
             }
         }
     }

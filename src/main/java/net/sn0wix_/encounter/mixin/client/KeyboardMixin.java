@@ -1,9 +1,9 @@
-package net.sn0wix_.encounter.mixin;
+package net.sn0wix_.encounter.mixin.client;
 
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
-import net.sn0wix_.encounter.client.Variables;
+import net.sn0wix_.encounter.client.util.ClientVariables;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,7 +19,7 @@ public abstract class KeyboardMixin {
 
     @Inject(method = "onKey", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getNarratorManager()Lnet/minecraft/client/util/NarratorManager;", shift = At.Shift.BEFORE), cancellable = true)
     private void injectOnKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
-        if (Variables.isPlayerLocked()) {
+        if (ClientVariables.isPlayerLocked()) {
             if (this.client.currentScreen == null && client.player != null) {
                 KeyBinding.unpressAll();
             }

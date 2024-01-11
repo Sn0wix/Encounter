@@ -3,12 +3,13 @@
   "package": "net.sn0wix_.encounter.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "server.ServerPlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "KeyboardMixin",
-    "MouseMixin"
+    "client.KeyboardMixin",
+    "client.MouseMixin"
   ]
 }

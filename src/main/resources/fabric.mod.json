@@ -10,20 +10,20 @@
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Sn0wix/Encounter"
 	},
 	"license": "MIT",
 	"icon": "assets/encounter/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"net.sn0wix_.encounter.Encounter"
+			"net.sn0wix_.encounter.common.Encounter"
 		],
 		"client": [
-			"net.sn0wix_.encounter.EncounterClient"
+			"net.sn0wix_.encounter.client.EncounterClient"
 		],
 		"fabric-datagen": [
-			"net.sn0wix_.encounter.EncounterDataGenerator"
+          "net.sn0wix_.encounter.datagen.EncounterDataGenerator"
 		]
 	},
 	"mixins": [

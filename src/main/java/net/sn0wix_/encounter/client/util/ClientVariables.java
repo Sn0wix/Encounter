@@ -1,8 +1,8 @@
-package net.sn0wix_.encounter.client;
+package net.sn0wix_.encounter.client.util;
 
 import net.minecraft.util.math.Vec3d;
 
-public class Variables {
+public class ClientVariables {
     private static boolean isPlayerLocked = false;
     private static Vec3d scarePos = null;
 

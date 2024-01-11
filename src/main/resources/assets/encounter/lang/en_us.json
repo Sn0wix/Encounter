@@ -6,5 +6,5 @@
   "item.encounter.stalker_spawn_egg": "Stalker Spawn Egg",
 
   "entity.encounter.stalker": "The Stalker",
-  "sounds.encounter.jumpscare": "Screaming"
+  "sounds.encounter.stalker_jumpscare": "Screaming"
 }

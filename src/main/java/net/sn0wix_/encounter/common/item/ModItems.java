@@ -1,4 +1,4 @@
-package net.sn0wix_.encounter.item;
+package net.sn0wix_.encounter.common.item;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -9,11 +9,11 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
-import net.sn0wix_.encounter.Encounter;
-import net.sn0wix_.encounter.entity.ModEntities;
+import net.sn0wix_.encounter.common.Encounter;
+import net.sn0wix_.encounter.common.entity.ModEntities;
 
 public class ModItems {
-    public static final Item KEVOSAURUS_REX_SPAWN_EGG = registerItem("stalker_spawn_egg",
+    public static final Item STALKER_SPAWN_EGG = registerItem("stalker_spawn_egg",
             new SpawnEggItem(ModEntities.STALKER, 7025684, 14861373, new FabricItemSettings()));
 
     private static Item registerItem(String name, Item item) {

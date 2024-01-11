@@ -1,8 +1,8 @@
 {
-  "jumpscare": {
-    "subtitle": "sounds.encounter.jumpscare",
+  "stalker_jumpscare": {
+    "subtitle": "sounds.encounter.stalker_jumpscare",
     "sounds": [
-      "encounter:jumpscare"
+      "encounter:stalker_jumpscare"
     ]
   }
 }

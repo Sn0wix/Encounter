@@ -1,9 +1,9 @@
-package net.sn0wix_.encounter.client.renderers.stalker;
+package net.sn0wix_.encounter.client.models;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.sn0wix_.encounter.Encounter;
-import net.sn0wix_.encounter.entity.custom.StalkerEntity;
+import net.sn0wix_.encounter.common.Encounter;
+import net.sn0wix_.encounter.common.entity.custom.StalkerEntity;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;

@@ -1,8 +1,7 @@
-package net.sn0wix_.encounter;
+package net.sn0wix_.encounter.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.sn0wix_.encounter.datagen.ModModelProvider;
 
 public class EncounterDataGenerator implements DataGeneratorEntrypoint {
 	@Override

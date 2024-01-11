@@ -1,9 +1,9 @@
-package net.sn0wix_.encounter.networking;
+package net.sn0wix_.encounter.common.networking;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.util.Identifier;
-import net.sn0wix_.encounter.Encounter;
-import net.sn0wix_.encounter.networking.packets.PlayerLockS2CPacket;
+import net.sn0wix_.encounter.common.Encounter;
+import net.sn0wix_.encounter.common.networking.packets.s2c.PlayerLockS2CPacket;
 
 public class ModPackets {
     public static final Identifier LOCK_PLAYER = new Identifier(Encounter.MOD_ID, "lock_player");
