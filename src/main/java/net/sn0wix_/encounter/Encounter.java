@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 public class Encounter implements ModInitializer {
 	//TODO 5 monsters
 	//TODO went block
-	//TODO (disable shift when cut sceene)
+	//TODO (disable shift when cut scene)
 	//TODO disable jump + command
 	//TODO fix scare math
 	//TODO idea: secret ratafak skin
