@@ -18,8 +18,6 @@ public class Encounter implements ModInitializer {
 	//TODO fix scare math
 	//TODO idea: secret ratafak skin
 	//TODO crawl key(x)
-	//TODO rename git repo to encounter
-
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Encounter.MOD_ID);
 	public static final String MOD_ID = "encounter";
