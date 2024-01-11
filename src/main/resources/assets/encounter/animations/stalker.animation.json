@@ -1042,6 +1042,83 @@
 					}
 				}
 			}
+		},
+
+		"animation.stalker.sleep": {
+			"loop": true,
+			"animation_length": 0.25,
+			"bones": {
+				"stalker": {
+					"position": {
+						"vector": [0, -32, 0]
+					}
+				},
+				"body": {
+					"rotation": {
+						"vector": [-12.5, 0, 0]
+					}
+				},
+				"boddy_top": {
+					"rotation": {
+						"vector": [40, 0, 0]
+					}
+				},
+				"h_neck": {
+					"rotation": {
+						"vector": [47.5, 0, 0]
+					}
+				},
+				"h_head": {
+					"rotation": {
+						"vector": [-14.14314, 5.90316, 16.50371]
+					}
+				},
+				"h_jaw": {
+					"position": {
+						"vector": [0, 6, 1]
+					}
+				},
+				"arm_r": {
+					"rotation": {
+						"vector": [-26.06663, 9.08661, 17.89244]
+					}
+				},
+				"elbo_r": {
+					"rotation": {
+						"vector": [-58.19752, -23.58734, 39.56368]
+					}
+				},
+				"arm_l": {
+					"rotation": {
+						"vector": [-12.5, 0, -15]
+					}
+				},
+				"elbo_l": {
+					"rotation": {
+						"vector": [-39.89247, 3.21154, -41.16576]
+					}
+				},
+				"leg_r": {
+					"rotation": {
+						"vector": [-144.67945, 22.42171, 0.9381]
+					}
+				},
+				"kney_r": {
+					"rotation": {
+						"vector": [145, 0, 0]
+					}
+				},
+				"leg_l": {
+					"rotation": {
+						"vector": [-137.5, -22.5, 0]
+					}
+				},
+				"kney_l": {
+					"rotation": {
+						"vector": [107.5, 0, 0]
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

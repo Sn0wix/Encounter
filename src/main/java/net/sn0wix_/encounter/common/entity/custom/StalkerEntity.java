@@ -8,12 +8,14 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.world.World;
 import net.sn0wix_.encounter.common.sounds.ModSounds;
 import software.bernie.geckolib.core.animation.*;
+import software.bernie.geckolib.core.object.PlayState;
 
 public class StalkerEntity extends JumpscaringEntity {
-    public static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.stalker.idle");
-    public static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.stalker.run");
-    public static final RawAnimation SCARE = RawAnimation.begin().thenPlay("animation.stalker.scare");
-    public static final RawAnimation WAKEUP = RawAnimation.begin().thenPlay("animation.stalker.wakeup");
+    public static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("animation.stalker.idle");
+    public static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("animation.stalker.run");
+    public static final RawAnimation SCARE_ANIM = RawAnimation.begin().thenPlay("animation.stalker.scare");
+    public static final RawAnimation SLEEP_ANIM = RawAnimation.begin().thenPlayAndHold("animation.stalker.sleep");
+    public static final RawAnimation WAKEUP_ANIM = RawAnimation.begin().thenPlay("animation.stalker.wakeup");
 
     public static final TrackedData<Boolean> SLEEPING = DataTracker.registerData(StalkerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
@@ -29,18 +31,37 @@ public class StalkerEntity extends JumpscaringEntity {
     }
 
     @Override
+    public PlayState predicate(AnimationState<StalkerEntity> state) {
+        if (this.dataTracker.get(SLEEPING)) {
+            return state.setAndContinue(SLEEP_ANIM);
+        }
+
+        if (state.isMoving()) {
+            return state.setAndContinue(getWalkAnim());
+        }
+
+        return state.setAndContinue(getIdleAnim());
+    }
+
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(SLEEPING, false);
+    }
+
+    @Override
     public RawAnimation getIdleAnim() {
-        return IDLE;
+        return IDLE_ANIM;
     }
 
     @Override
     public RawAnimation getWalkAnim() {
-        return WALK;
+        return WALK_ANIM;
     }
 
     @Override
     public RawAnimation getScareAnim() {
-        return SCARE;
+        return SCARE_ANIM;
     }
 
     @Override
