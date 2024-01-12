@@ -4,5 +4,17 @@
     "sounds": [
       "encounter:stalker_jumpscare"
     ]
+  },
+  "crawler_jumpscare": {
+    "subtitle": "sounds.encounter.crawler_jumpscare",
+    "sounds": [
+      "encounter:crawler_jumpscare"
+    ]
+  },
+  "crawler_peek": {
+    "subtitle": "sounds.encounter.crawler_peek",
+    "sounds": [
+      "encounter:crawler_peek"
+    ]
   }
 }

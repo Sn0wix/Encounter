@@ -16,6 +16,9 @@ public class ModItems {
     public static final Item STALKER_SPAWN_EGG = registerItem("stalker_spawn_egg",
             new SpawnEggItem(ModEntities.STALKER, 7025684, 14861373, new FabricItemSettings()));
 
+    public static final Item CRAWLER_SPAWN_EGG = registerItem("crawler_spawn_egg",
+            new SpawnEggItem(ModEntities.CRAWLER, 4144959, 16777215, new FabricItemSettings()));
+
     private static Item registerItem(String name, Item item) {
         Item item1 = Registry.register(Registries.ITEM, new Identifier(Encounter.MOD_ID, name), item);
         addItemToGroup(item1, ModItemGroup.NORMAL_ITEM_GROUP_KEY);

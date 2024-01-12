@@ -20,13 +20,14 @@ import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import net.sn0wix_.encounter.common.networking.packets.s2c.PlayerLockS2CPacket;
 import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
-public abstract class JumpscaringEntity extends HostileEntity implements GeoEntity {
+public abstract class JumpscaringEntity<T extends GeoAnimatable> extends HostileEntity implements GeoEntity {
     private Vec3d scareLookVec;
     private Vec3d scarePosPlayerVec;
     private Vec3d scarePosVec;
@@ -42,7 +43,7 @@ public abstract class JumpscaringEntity extends HostileEntity implements GeoEnti
     public abstract void playScareSound();
     public abstract int getMaxScareTicks();
     public abstract int getSoundScareTicks();
-    public abstract int getScaringDistanceBetweenPlayer();
+    public abstract double getScaringDistanceBetweenPlayer();
     public abstract double getScaringPosYOffset();
 
     @Override
@@ -62,7 +63,7 @@ public abstract class JumpscaringEntity extends HostileEntity implements GeoEnti
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32f);
     }
 
-    public PlayState predicate(AnimationState<StalkerEntity> state) {
+    public PlayState predicate(AnimationState<T> state) {
         if (state.isMoving()) {
             return state.setAndContinue(getWalkAnim());
         }

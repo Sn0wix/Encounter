@@ -10,7 +10,7 @@ import net.sn0wix_.encounter.common.sounds.ModSounds;
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 
-public class StalkerEntity extends JumpscaringEntity {
+public class StalkerEntity extends JumpscaringEntity<StalkerEntity> {
     public static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("animation.stalker.idle");
     public static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("animation.stalker.run");
     public static final RawAnimation SCARE_ANIM = RawAnimation.begin().thenPlay("animation.stalker.scare");
@@ -21,7 +21,6 @@ public class StalkerEntity extends JumpscaringEntity {
 
     public StalkerEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
-        this.dataTracker.startTracking(SLEEPING, true);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class StalkerEntity extends JumpscaringEntity {
     }
 
     @Override
-    public int getScaringDistanceBetweenPlayer() {
+    public double getScaringDistanceBetweenPlayer() {
         return 2;
     }
 

@@ -19,6 +19,7 @@ public class Encounter implements ModInitializer {
 	//TODO crawl key(x)
 	//TODO stalker sleep
 	//TODO add new "pumpkin"
+	//TODO add a config file that saves hash maps and variables
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Encounter.MOD_ID);
 	public static final String MOD_ID = "encounter";

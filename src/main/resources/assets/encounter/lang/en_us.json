@@ -3,8 +3,14 @@
   "key.encounter.crawl": "Crawl Key",
 
   "encounter.item_tab": "Encounter Items",
-  "item.encounter.stalker_spawn_egg": "Stalker Spawn Egg",
+  "item.encounter.stalker_spawn_egg": "The Stalker Spawn Egg",
+  "item.encounter.crawler_spawn_egg": "Crawler Spawn Egg",
+
 
   "entity.encounter.stalker": "The Stalker",
-  "sounds.encounter.stalker_jumpscare": "Screaming"
+  "sounds.encounter.stalker_jumpscare": "Screaming",
+
+  "entity.encounter.crawler": "Crawler",
+  "sounds.encounter.crawler_jumpscare": "Screaming",
+  "sounds.encounter.crawler_peek": "Screaming"
 }
