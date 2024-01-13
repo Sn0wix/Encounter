@@ -3,7 +3,7 @@
 	"id": "encounter",
 	"version": "${version}",
 	"name": "encounter",
-	"description": "Mod for the encounter map!",
+	"description": "Mod for The Encounter map!",
 	"authors": [
 		"Sn0wix_",
 		"BubbaGump7"
@@ -37,6 +37,7 @@
 		"geckolib": "4.2.2"
 	},
 	"suggests": {
-		"geckolib": "https://modrinth.com/mod/geckolib"
+		"geckolib": "https://modrinth.com/mod/geckolib",
+		"fabric-api": "https://modrinth.com/mod/fabric-api"
 	}
 }
