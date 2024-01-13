@@ -20,6 +20,8 @@ public class Encounter implements ModInitializer {
 	//TODO stalker sleep
 	//TODO add new "pumpkin"
 	//TODO add a config file that saves hash maps and variables
+	//TODO return to f1 when scaring
+	//TODO auto options
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Encounter.MOD_ID);
 	public static final String MOD_ID = "encounter";

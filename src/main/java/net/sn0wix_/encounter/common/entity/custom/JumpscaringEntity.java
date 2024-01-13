@@ -31,7 +31,7 @@ public abstract class JumpscaringEntity<T extends GeoAnimatable> extends Hostile
     private Vec3d scareLookVec;
     private Vec3d scarePosPlayerVec;
     private Vec3d scarePosVec;
-    private int scareTicksLeft = 0;
+    public int scareTicksLeft = 0;
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
     public JumpscaringEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -69,6 +69,10 @@ public abstract class JumpscaringEntity<T extends GeoAnimatable> extends Hostile
         }
 
         return state.setAndContinue(getIdleAnim());
+    }
+
+    public void startScareAnim() {
+        this.triggerAnim("controller", "scare");
     }
 
     @Override

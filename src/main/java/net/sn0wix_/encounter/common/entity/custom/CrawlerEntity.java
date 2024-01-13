@@ -31,8 +31,12 @@ public class CrawlerEntity extends JumpscaringEntity<CrawlerEntity> {
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 20)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3f)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5f)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32f);
+    }
+
+    public void startPeekAnim() {
+        this.triggerAnim("controller", "peek");
     }
 
     @Override
@@ -67,7 +71,7 @@ public class CrawlerEntity extends JumpscaringEntity<CrawlerEntity> {
 
     @Override
     public double getScaringDistanceBetweenPlayer() {
-        return 1;
+        return 2.7;
     }
 
     @Override
