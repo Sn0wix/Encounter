@@ -9,6 +9,7 @@ import net.sn0wix_.encounter.common.Encounter;
 public class ModSounds {
     public static final SoundEvent STALKER_JUMPSCARE = registerSoundEvent("stalker_jumpscare");
     public static final SoundEvent CRAWLER_JUMPSCARE = registerSoundEvent("crawler_jumpscare");
+    public static final SoundEvent PHANTOM_JUMPSCARE = registerSoundEvent("phantom_jumpscare");
     public static final SoundEvent CRAWLER_PEEK = registerSoundEvent("crawler_peek");
 
     private static SoundEvent registerSoundEvent(String name) {

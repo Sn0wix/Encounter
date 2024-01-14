@@ -40,9 +40,9 @@ public abstract class EntityModel<T extends JumpscaringEntity<T>> extends GeoMod
     @Override
     public void setCustomAnimations(T animatable, long instanceId, AnimationState<T> animationState) {
         CoreGeoBone head = getAnimationProcessor().getBone("head");
-        CoreGeoBone base = getAnimationProcessor().getBone("base");
+        //CoreGeoBone base = getAnimationProcessor().getBone("base");
 
-        base.setRotY(0);
+        //base.setRotY(0);
 
         if (animatable.getDataTracker().get(T.SCARING)) {
             //Encounter.LOGGER.info("base rot: " + base.getRotY());

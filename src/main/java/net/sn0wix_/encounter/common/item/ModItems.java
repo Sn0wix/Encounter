@@ -17,19 +17,19 @@ public class ModItems {
             new SpawnEggItem(ModEntities.STALKER, 7025684, 14861373, new FabricItemSettings()));
 
     public static final Item CRAWLER_SPAWN_EGG = registerItem("crawler_spawn_egg",
-            new SpawnEggItem(ModEntities.CRAWLER, 4144959, 16777215, new FabricItemSettings()));
+            new SpawnEggItem(ModEntities.CRAWLER, 15790320, 1315860, new FabricItemSettings()));
+
+    public static final Item PHANTOM_SPAWN_EGG = registerItem("phantom_spawn_egg",
+            new SpawnEggItem(ModEntities.PHANTOM, 4144959, 16777215, new FabricItemSettings()));
 
     private static Item registerItem(String name, Item item) {
         Item item1 = Registry.register(Registries.ITEM, new Identifier(Encounter.MOD_ID, name), item);
         addItemToGroup(item1, ModItemGroup.NORMAL_ITEM_GROUP_KEY);
-
         return item1;
     }
 
     private static void addItemToGroup(Item item, RegistryKey<ItemGroup> group) {
-        ItemGroupEvents.modifyEntriesEvent(group).register(content -> {
-            content.add(item);
-        });
+        ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.add(item));
     }
 
     public static void registerModItems() {
