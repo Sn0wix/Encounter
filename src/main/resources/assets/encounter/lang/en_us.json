@@ -5,6 +5,7 @@
   "encounter.item_tab": "Encounter Items",
   "item.encounter.stalker_spawn_egg": "The Stalker Spawn Egg",
   "item.encounter.crawler_spawn_egg": "Crawler Spawn Egg",
+  "item.encounter.phantom_spawn_egg": "Phantom Spawn Egg",
 
 
   "entity.encounter.stalker": "The Stalker",
@@ -12,5 +13,8 @@
 
   "entity.encounter.crawler": "Crawler",
   "sounds.encounter.crawler_jumpscare": "Screaming",
-  "sounds.encounter.crawler_peek": "Screaming"
+  "sounds.encounter.crawler_peek": "Screaming",
+
+  "entity.encounter.phantom": "Phantom",
+  "sounds.encounter.phantom_jumpscare": "Screaming"
 }

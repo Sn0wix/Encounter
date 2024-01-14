@@ -11,6 +11,12 @@
       "encounter:crawler_jumpscare"
     ]
   },
+  "phantom_jumpscare": {
+    "subtitle": "sounds.encounter.phantom_jumpscare",
+    "sounds": [
+      "encounter:phantom_jumpscare"
+    ]
+  },
   "crawler_peek": {
     "subtitle": "sounds.encounter.crawler_peek",
     "sounds": [

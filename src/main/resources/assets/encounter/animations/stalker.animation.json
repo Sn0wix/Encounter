@@ -4,7 +4,7 @@
 		"animation.stalker.scare": {
 			"animation_length": 1.33333,
 			"bones": {
-				"stalker": {
+				"base": {
 					"position": {
 						"vector": [0, -3, 0]
 					}
@@ -46,7 +46,7 @@
 						"vector": [12.5, 0, 0]
 					}
 				},
-				"h_head": {
+				"head": {
 					"rotation": {
 						"0.0": {
 							"vector": [-22.32648, -2.86313, -6.93488]
@@ -200,7 +200,7 @@
 		"animation.stalker.wakeup": {
 			"animation_length": 6.83333,
 			"bones": {
-				"stalker": {
+				"base": {
 					"rotation": {
 						"4.875": {
 							"vector": [0, 0, -2.5]
@@ -302,7 +302,7 @@
 						}
 					}
 				},
-				"h_head": {
+				"head": {
 					"rotation": {
 						"0.0": {
 							"vector": [-14.14314, 5.90316, 16.50371]
@@ -588,7 +588,7 @@
 			"loop": true,
 			"animation_length": 0.79167,
 			"bones": {
-				"stalker": {
+				"base": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -660,7 +660,7 @@
 						}
 					}
 				},
-				"h_head": {
+				"head": {
 					"rotation": {
 						"0.0": {
 							"vector": [-11.78301, -1.16128, -1.07614]
@@ -864,7 +864,7 @@
 			"loop": true,
 			"animation_length": 1.25,
 			"bones": {
-				"stalker": {
+				"base": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -915,7 +915,7 @@
 						}
 					}
 				},
-				"h_head": {
+				"head": {
 					"rotation": {
 						"0.0": {
 							"vector": [-4.30999, 6.46809, -1.78063]
@@ -1048,7 +1048,7 @@
 			"loop": true,
 			"animation_length": 0.25,
 			"bones": {
-				"stalker": {
+				"base": {
 					"position": {
 						"vector": [0, -32, 0]
 					}
@@ -1068,7 +1068,7 @@
 						"vector": [47.5, 0, 0]
 					}
 				},
-				"h_head": {
+				"head": {
 					"rotation": {
 						"vector": [-14.14314, 5.90316, 16.50371]
 					}

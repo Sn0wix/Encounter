@@ -5,6 +5,7 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.sn0wix_.encounter.common.sounds.ModSounds;
 import software.bernie.geckolib.core.animation.*;
@@ -76,6 +77,11 @@ public class StalkerEntity extends JumpscaringEntity<StalkerEntity> {
     @Override
     public double getScaringPosYOffset() {
         return 0.2;
+    }
+
+    @Override
+    public BlockPos getRedstoneBlockSpawnPos() {
+        return new BlockPos(0,0,0);
     }
 
     @Override

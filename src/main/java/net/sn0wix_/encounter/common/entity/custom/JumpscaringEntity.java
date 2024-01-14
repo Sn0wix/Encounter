@@ -1,5 +1,6 @@
 package net.sn0wix_.encounter.common.entity.custom;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
@@ -11,13 +12,21 @@ import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
+import net.sn0wix_.encounter.common.Encounter;
 import net.sn0wix_.encounter.common.networking.packets.s2c.PlayerLockS2CPacket;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
@@ -27,24 +36,45 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public abstract class JumpscaringEntity<T extends GeoAnimatable> extends HostileEntity implements GeoEntity {
     private Vec3d scareLookVec;
     private Vec3d scarePosPlayerVec;
     private Vec3d scarePosVec;
-    public int scareTicksLeft = 0;
-    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+    private int scareTicksLeft = 0;
+    private BlockPos redstoneBlockSpawnPos;
+    public final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+    public static final TrackedData<Boolean> SCARING = DataTracker.registerData(JumpscaringEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+
     public JumpscaringEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
     }
 
     public abstract RawAnimation getIdleAnim();
+
     public abstract RawAnimation getWalkAnim();
+
     public abstract RawAnimation getScareAnim();
+
     public abstract void playScareSound();
+
     public abstract int getMaxScareTicks();
+
     public abstract int getSoundScareTicks();
+
     public abstract double getScaringDistanceBetweenPlayer();
+
     public abstract double getScaringPosYOffset();
+
+    public int getCustomEventTicks() {
+        return 0;
+    }
+
+    public abstract BlockPos getRedstoneBlockSpawnPos();
 
     @Override
     protected void initGoals() {
@@ -95,6 +125,10 @@ public abstract class JumpscaringEntity<T extends GeoAnimatable> extends Hostile
                 this.setVelocity(0, 0, 0);
                 scareLookVec = assignLookVec();
 
+                if (scareTicksLeft == getCustomEventTicks()) {
+                    executeCustomEvent();
+                }
+
                 if (scarePosVec != null) {
                     this.setPosition(scarePosVec);
                     //this.requestTeleport(scarePosVec.x, scarePosVec.y, scarePosVec.z);
@@ -106,14 +140,30 @@ public abstract class JumpscaringEntity<T extends GeoAnimatable> extends Hostile
                 }
 
                 if (scareTicksLeft == 0) {
-                    this.scareLookVec = null;
-                    this.scarePosPlayerVec = null;
-                    this.scarePosVec = null;
-                    this.setNoGravity(false);
-                    this.getWorld().getPlayers().forEach(player -> PlayerLockS2CPacket.sendUnlockAndWriteToHashMap((ServerPlayerEntity) player));
+                    stopScaring();
+                    spawnRedstoneBlock();
                 }
             }
         }
+    }
+
+    //{CustomKillPos:[I;76,57,-116]}
+    public void spawnRedstoneBlock() {
+        if (!this.getWorld().isClient && redstoneBlockSpawnPos != null) {
+            this.getWorld().setBlockState(redstoneBlockSpawnPos, Blocks.REDSTONE_BLOCK.getDefaultState());
+        }
+    }
+
+    public void stopScaring() {
+        this.scareLookVec = null;
+        this.scarePosPlayerVec = null;
+        this.scarePosVec = null;
+        this.setNoGravity(false);
+        this.dataTracker.set(SCARING, false);
+        this.getWorld().getPlayers().forEach(player -> PlayerLockS2CPacket.sendUnlockAndWriteToHashMap((ServerPlayerEntity) player));
+    }
+
+    public void executeCustomEvent() {
     }
 
     private Vec3d handleScareOffSet() {
@@ -161,6 +211,7 @@ public abstract class JumpscaringEntity<T extends GeoAnimatable> extends Hostile
                 scarePosVec = assignPosVec();
                 this.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, scareLookVec);
                 this.setNoGravity(true);
+                this.dataTracker.set(SCARING, true);
                 scareAll();
                 this.getWorld().getPlayers().forEach(player -> PlayerLockS2CPacket.sendLockAndWriteToHashMap((ServerPlayerEntity) player, scarePosPlayerVec));
                 this.triggerAnim("controller", "scare");
@@ -174,7 +225,7 @@ public abstract class JumpscaringEntity<T extends GeoAnimatable> extends Hostile
         return new Vec3d(this.getPos().x, this.getPos().y, this.getPos().z);
     }
 
-    private Vec3d assignLookVec() {
+    protected Vec3d assignLookVec() {
         return new Vec3d(this.getLookControl().getLookX(), this.getEyeY(), this.getLookControl().getLookZ());
     }
 
@@ -198,5 +249,32 @@ public abstract class JumpscaringEntity<T extends GeoAnimatable> extends Hostile
 
     private double getSquaredMaxAttackDistance(LivingEntity entity) {
         return this.getWidth() * 2.0F * this.getWidth() * 2.0F + entity.getWidth();
+    }
+
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        if (this.redstoneBlockSpawnPos != null) {
+            nbt.putIntArray("CustomKillPos", List.of(this.redstoneBlockSpawnPos.getX(), this.redstoneBlockSpawnPos.getY(), this.redstoneBlockSpawnPos.getZ()));
+        } else {
+            nbt.putIntArray("CustomKillPos", List.of(getRedstoneBlockSpawnPos().getX(), getRedstoneBlockSpawnPos().getY(), getRedstoneBlockSpawnPos().getZ()));
+        }
+    }
+
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        int[] posList = nbt.getIntArray("CustomKillPos");
+        if (posList.length != 0) {
+            this.redstoneBlockSpawnPos = new BlockPos(posList[0], posList[1], posList[2]);
+        } else {
+            this.redstoneBlockSpawnPos = getRedstoneBlockSpawnPos();
+        }
+    }
+
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(SCARING, false);
     }
 }

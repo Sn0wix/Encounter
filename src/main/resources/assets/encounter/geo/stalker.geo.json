@@ -12,12 +12,12 @@
 			},
 			"bones": [
 				{
-					"name": "stalker",
+					"name": "base",
 					"pivot": [0.5, 0, 0]
 				},
 				{
 					"name": "body",
-					"parent": "stalker",
+					"parent": "base",
 					"pivot": [0.5, 36, 0],
 					"cubes": [
 						{
@@ -87,7 +87,7 @@
 					]
 				},
 				{
-					"name": "h_head",
+					"name": "head",
 					"parent": "h_neck",
 					"pivot": [0.5, 68, -4],
 					"cubes": [
@@ -107,7 +107,7 @@
 				},
 				{
 					"name": "h_jaw",
-					"parent": "h_head",
+					"parent": "head",
 					"pivot": [0.5, 67, -5],
 					"rotation": [-10, 0, 0],
 					"cubes": [
@@ -275,7 +275,7 @@
 				},
 				{
 					"name": "leg_r",
-					"parent": "stalker",
+					"parent": "base",
 					"pivot": [-3, 34, 0],
 					"cubes": [
 						{
@@ -313,7 +313,7 @@
 				},
 				{
 					"name": "leg_l",
-					"parent": "stalker",
+					"parent": "base",
 					"pivot": [4, 34, 0],
 					"cubes": [
 						{

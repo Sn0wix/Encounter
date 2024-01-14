@@ -5,7 +5,6 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.sn0wix_.encounter.common.Encounter;
 import net.sn0wix_.encounter.common.entity.custom.JumpscaringEntity;
 
 public class StartScareAnimCommand {

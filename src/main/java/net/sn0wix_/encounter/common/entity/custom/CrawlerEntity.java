@@ -4,6 +4,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.sn0wix_.encounter.common.sounds.ModSounds;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -31,8 +33,13 @@ public class CrawlerEntity extends JumpscaringEntity<CrawlerEntity> {
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 20)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5f)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32f);
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 169f);
+    }
+
+    @Override
+    protected Vec3d assignLookVec() {
+        return new Vec3d(this.getLookControl().getLookX(), this.getEyeY() + 0.5, this.getLookControl().getLookZ());
     }
 
     public void startPeekAnim() {
@@ -61,12 +68,12 @@ public class CrawlerEntity extends JumpscaringEntity<CrawlerEntity> {
 
     @Override
     public int getMaxScareTicks() {
-        return 55;
+        return 29;
     }
 
     @Override
     public int getSoundScareTicks() {
-        return 54;
+        return 28;
     }
 
     @Override
@@ -76,6 +83,11 @@ public class CrawlerEntity extends JumpscaringEntity<CrawlerEntity> {
 
     @Override
     public double getScaringPosYOffset() {
-        return 0;
+        return -0.2;
+    }
+
+    @Override
+    public BlockPos getRedstoneBlockSpawnPos() {
+        return new BlockPos(76, 57, -116);
     }
 }
