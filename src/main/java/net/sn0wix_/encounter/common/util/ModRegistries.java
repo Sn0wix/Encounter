@@ -26,5 +26,6 @@ public class ModRegistries {
         CommandRegistrationCallback.EVENT.register(StartCrawlerPeekAnimCommand::register);
         CommandRegistrationCallback.EVENT.register(StartScareAnimCommand::register);
         CommandRegistrationCallback.EVENT.register(RandomCommand::register);
+        CommandRegistrationCallback.EVENT.register(CustomHelpCommand::register);
     }
 }
