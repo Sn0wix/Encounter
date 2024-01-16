@@ -18,15 +18,12 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
-import net.sn0wix_.encounter.common.Encounter;
 import net.sn0wix_.encounter.common.networking.packets.s2c.PlayerLockS2CPacket;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
@@ -36,17 +33,14 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public abstract class JumpscaringEntity<T extends GeoAnimatable> extends HostileEntity implements GeoEntity {
-    private Vec3d scareLookVec;
-    private Vec3d scarePosPlayerVec;
-    private Vec3d scarePosVec;
-    private int scareTicksLeft = 0;
-    private BlockPos redstoneBlockSpawnPos;
+    protected Vec3d scareLookVec;
+    protected Vec3d scarePosPlayerVec;
+    protected Vec3d scarePosVec;
+    protected int scareTicksLeft = 0;
+    protected BlockPos redstoneBlockSpawnPos;
     public final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
     public static final TrackedData<Boolean> SCARING = DataTracker.registerData(JumpscaringEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
@@ -190,12 +184,25 @@ public abstract class JumpscaringEntity<T extends GeoAnimatable> extends Hostile
         player.changeGameMode(GameMode.SPECTATOR);
     }
 
-    private void scareAll() {
+    protected void scareAll() {
         this.getWorld().getPlayers().forEach(player -> {
             if (player instanceof ServerPlayerEntity serverPlayer && !serverPlayer.isSpectator()) {
                 scareOne(serverPlayer);
             }
         });
+    }
+
+    public void startScaring() {
+        this.getNavigation().stop();
+        this.scareTicksLeft = getMaxScareTicks();
+        scareLookVec = assignLookVec();
+        scarePosVec = assignPosVec();
+        this.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, scareLookVec);
+        this.setNoGravity(true);
+        this.dataTracker.set(SCARING, true);
+        scareAll();
+        this.getWorld().getPlayers().forEach(player -> PlayerLockS2CPacket.sendLockAndWriteToHashMap((ServerPlayerEntity) player, scarePosPlayerVec));
+        this.triggerAnim("controller", "scare");
     }
 
     @Override
@@ -205,23 +212,14 @@ public abstract class JumpscaringEntity<T extends GeoAnimatable> extends Hostile
             double d = this.getSquaredMaxAttackDistance((LivingEntity) target);
 
             if (squaredDistance <= d) {
-                this.getNavigation().stop();
-                this.scareTicksLeft = getMaxScareTicks();
-                scareLookVec = assignLookVec();
-                scarePosVec = assignPosVec();
-                this.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, scareLookVec);
-                this.setNoGravity(true);
-                this.dataTracker.set(SCARING, true);
-                scareAll();
-                this.getWorld().getPlayers().forEach(player -> PlayerLockS2CPacket.sendLockAndWriteToHashMap((ServerPlayerEntity) player, scarePosPlayerVec));
-                this.triggerAnim("controller", "scare");
+                startScaring();
                 return true;
             }
         }
         return false;
     }
 
-    private Vec3d assignPosVec() {
+    protected Vec3d assignPosVec() {
         return new Vec3d(this.getPos().x, this.getPos().y, this.getPos().z);
     }
 

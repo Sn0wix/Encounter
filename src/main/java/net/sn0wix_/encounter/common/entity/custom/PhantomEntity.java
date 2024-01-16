@@ -1,22 +1,22 @@
 package net.sn0wix_.encounter.common.entity.custom;
 
+import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.sn0wix_.encounter.common.networking.packets.s2c.PlayerLockS2CPacket;
 import net.sn0wix_.encounter.common.sounds.ModSounds;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 
 public class PhantomEntity extends JumpscaringEntity<PhantomEntity> {
     public static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("animation.phantom.idle");
     public static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("animation.phantom.walk");
-    public static final RawAnimation SCARE_ANIM = RawAnimation.begin().thenPlayAndHold("animation.phantom.scare");
+    public static final RawAnimation SCARE_ANIM = RawAnimation.begin().thenLoop("animation.phantom.scare");
 
     public PhantomEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -24,7 +24,7 @@ public class PhantomEntity extends JumpscaringEntity<PhantomEntity> {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this, "walk_idle_controller", 5, this::walkIdlePredicate));
+        controllerRegistrar.add(new AnimationController<>(this, "walk_idle_controller", 5, this::walkIdlePredicate).triggerableAnim("scare", getScareAnim()));
         controllerRegistrar.add(new AnimationController<>(this, "scare_controller", 0, this::scarePredicate).triggerableAnim("scare", getScareAnim()));
     }
 
@@ -42,7 +42,7 @@ public class PhantomEntity extends JumpscaringEntity<PhantomEntity> {
 
     public PlayState scarePredicate(AnimationState<PhantomEntity> state) {
         if (this.dataTracker.get(SCARING)) {
-            return PlayState.CONTINUE;
+            return state.setAndContinue(SCARE_ANIM);
         }
 
         return PlayState.STOP;
@@ -58,8 +58,21 @@ public class PhantomEntity extends JumpscaringEntity<PhantomEntity> {
     }
 
     @Override
-    public void startScareAnim() {
+    public void startScaring() {
+        this.getNavigation().stop();
+        this.scareTicksLeft = getMaxScareTicks();
+        scareLookVec = assignLookVec();
+        scarePosVec = assignPosVec();
+        this.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, scareLookVec);
+        this.setNoGravity(true);
+        this.dataTracker.set(SCARING, true);
+        scareAll();
+        this.getWorld().getPlayers().forEach(player -> PlayerLockS2CPacket.sendLockAndWriteToHashMap((ServerPlayerEntity) player, scarePosPlayerVec));
+    }
 
+    @Override
+    public void startScareAnim() {
+        this.triggerAnim("walk_idle_controller", "scare");
     }
 
     @Override
@@ -94,7 +107,7 @@ public class PhantomEntity extends JumpscaringEntity<PhantomEntity> {
 
     @Override
     public double getScaringDistanceBetweenPlayer() {
-        return 3;
+        return 2;
     }
 
     @Override

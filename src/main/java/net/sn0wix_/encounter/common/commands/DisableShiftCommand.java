@@ -7,11 +7,11 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import net.sn0wix_.encounter.common.networking.packets.s2c.PlayerDisableJumpS2CPacket;
+import net.sn0wix_.encounter.common.networking.packets.s2c.PlayerDisableShiftS2CPacket;
 
-public class DisableJumpCommand {
+public class DisableShiftCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-        dispatcher.register(CommandManager.literal("disable_jump").then(CommandManager.argument("disable", BoolArgumentType.bool()).executes(DisableJumpCommand::run)));
+        dispatcher.register(CommandManager.literal("disable_shift").then(CommandManager.argument("disable", BoolArgumentType.bool()).executes(DisableShiftCommand::run)));
     }
 
     private static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
@@ -19,16 +19,16 @@ public class DisableJumpCommand {
 
         if (disable) {
             serverCommandSourceCommandContext.getSource().getServer().getPlayerManager().getPlayerList().forEach(player -> {
-                PlayerDisableJumpS2CPacket.send(player, true);
+                PlayerDisableShiftS2CPacket.send(player, true);
             });
 
-            serverCommandSourceCommandContext.getSource().sendFeedback(() -> Text.of("Successfully disabled jump for all players."), false);
+            serverCommandSourceCommandContext.getSource().sendFeedback(() -> Text.of("Successfully disabled shift for all players."), false);
         } else {
             serverCommandSourceCommandContext.getSource().getServer().getPlayerManager().getPlayerList().forEach(player -> {
-                PlayerDisableJumpS2CPacket.send(player, false);
+                PlayerDisableShiftS2CPacket.send(player, false);
             });
 
-            serverCommandSourceCommandContext.getSource().sendFeedback(() -> Text.of("Successfully enabled jump for all players."), false);
+            serverCommandSourceCommandContext.getSource().sendFeedback(() -> Text.of("Successfully enabled shift for all players."), false);
         }
 
         return 0;

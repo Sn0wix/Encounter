@@ -8,23 +8,22 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.sn0wix_.encounter.client.util.ClientVariables;
-import net.sn0wix_.encounter.common.Encounter;
 import net.sn0wix_.encounter.common.networking.ModPackets;
 
-public class PlayerDisableJumpS2CPacket {
+public class PlayerDisableShiftS2CPacket {
     public static void reciveLock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        client.execute(() -> ClientVariables.setJumpLocked(true));
+        client.execute(() -> ClientVariables.setShiftLocked(true));
     }
 
     public static void reciveUnlock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        client.execute(() -> ClientVariables.setJumpLocked(false));
+        client.execute(() -> ClientVariables.setShiftLocked(false));
     }
 
     public static void send(ServerPlayerEntity player, boolean lock) {
         if (lock) {
-            ServerPlayNetworking.send(player, ModPackets.LOCK_JUMP, PacketByteBufs.create());
+            ServerPlayNetworking.send(player, ModPackets.LOCK_SHIFT, PacketByteBufs.create());
         } else {
-            ServerPlayNetworking.send(player, ModPackets.UNLOCK_JUMP, PacketByteBufs.create());
+            ServerPlayNetworking.send(player, ModPackets.UNLOCK_SHIFT, PacketByteBufs.create());
         }
     }
 }
