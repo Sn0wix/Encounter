@@ -2,8 +2,12 @@ package net.sn0wix_.encounter.client.event;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.text.Text;
+import net.sn0wix_.encounter.client.keyBindings.KeyVariables;
 import net.sn0wix_.encounter.client.util.ClientVariables;
+
+import java.security.Key;
 
 import static net.sn0wix_.encounter.client.keyBindings.KeyBindings.crawlKey;
 
@@ -20,9 +24,19 @@ public class ClientTickEvent {
         }
 
         private static void handleKeyInputs(MinecraftClient client) {
-            if (crawlKey.wasPressed()) {
-                if (client.player != null)
-                    client.player.sendMessage(Text.of("joooooooooooooo"));
+            if (client.player != null) {
+                if (crawlKey.isPressed() && !crawlKey.wasPressed() && !KeyVariables.isCrawlKeyPressed()) {
+                    client.player.sendMessage(Text.of("pressed"));
+                    KeyVariables.setCrawlKeyPressed(true);
+                } else if (!crawlKey.isPressed() && crawlKey.wasPressed() && KeyVariables.isCrawlKeyPressed()) {
+                    client.player.sendMessage(Text.of("released"));
+                    KeyVariables.setCrawlKeyPressed(false);
+                } else if (!crawlKey.isPressed() && KeyVariables.isCrawlKeyPressed()) {
+                    KeyVariables.setCrawlKeyPressed(false);
+                }
+
+                client.player.sendMessage(Text.of("is pressed " + crawlKey.isPressed()));
+                client.player.sendMessage(Text.of("was pressed " + crawlKey.wasPressed()));
             }
         }
     }
