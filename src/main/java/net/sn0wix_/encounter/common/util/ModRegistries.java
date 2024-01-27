@@ -23,10 +23,16 @@ public class ModRegistries {
     private static void registerCommands() {
         CommandRegistrationCallback.EVENT.register(DisableJumpCommand::register);
         CommandRegistrationCallback.EVENT.register(DisableShiftCommand::register);
+        CommandRegistrationCallback.EVENT.register(StopRenderingBossBarCommand::register);
+
+
         CommandRegistrationCallback.EVENT.register(StartCrawlerPeekAnimCommand::register);
         CommandRegistrationCallback.EVENT.register(StartScareAnimCommand::register);
+        CommandRegistrationCallback.EVENT.register(StartStalkerWakeUpAnimCommand::register);
+
+
         CommandRegistrationCallback.EVENT.register(RandomCommand::register);
-        CommandRegistrationCallback.EVENT.register(StopRenderingBossBarCommand::register);
+
         CommandRegistrationCallback.EVENT.register(CustomHelpCommand::register);
     }
 }

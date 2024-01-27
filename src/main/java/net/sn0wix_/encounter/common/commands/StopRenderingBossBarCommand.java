@@ -13,7 +13,7 @@ public class StopRenderingBossBarCommand {
         dispatcher.register(CommandManager.literal("render_boss_bar").then(CommandManager.argument("allowRendering", BoolArgumentType.bool()).executes(StopRenderingBossBarCommand::run)));
     }
 
-    private static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
+    public static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
         boolean allowRendering = BoolArgumentType.getBool(serverCommandSourceCommandContext, "allowRendering");
         serverCommandSourceCommandContext.getSource().getServer().getPlayerManager().getPlayerList().forEach(player -> BossBarRenderingS2CPacket.send(player, allowRendering));
 

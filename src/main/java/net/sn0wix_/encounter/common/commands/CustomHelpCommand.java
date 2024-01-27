@@ -13,7 +13,7 @@ public class CustomHelpCommand {
         dispatcher.register(CommandManager.literal("help_custom").executes(CustomHelpCommand::run));
     }
 
-    private static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
+    public static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
         Text text = Text.of("""
                 Commandy:
                 Zamknutí mezerníku: /disable_jump <true/false>
@@ -22,6 +22,8 @@ public class CustomHelpCommand {
                 Náhodná generace: /random <šance v %>
                 Zapnutí animace jumpscaru: /start_scare_anim_all
                 Zapnutí animace peeku(pouze crawler): /start_crawler_peek_anim
+                Zapnutí animace wake up(pouze stalker): /start_stalker_wake_up_anim
+
                                 
                 Custom NBT data:\s
                 Pro nastavení jiné pozice, než výchozí pro redstone block: {CustomKillPos:[I;x,y,z]}

@@ -14,7 +14,7 @@ public class DisableJumpCommand {
         dispatcher.register(CommandManager.literal("disable_jump").then(CommandManager.argument("disable", BoolArgumentType.bool()).executes(DisableJumpCommand::run)));
     }
 
-    private static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
+    public static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
         boolean disable = BoolArgumentType.getBool(serverCommandSourceCommandContext, "disable");
 
         if (disable) {

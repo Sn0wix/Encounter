@@ -17,7 +17,7 @@ public class RandomCommand {
         dispatcher.register(CommandManager.literal("random").then(CommandManager.argument("chance", IntegerArgumentType.integer(0, 100)).executes(RandomCommand::run)));
     }
 
-    private static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
+    public static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
         int chance = IntegerArgumentType.getInteger(serverCommandSourceCommandContext, "chance");
         Random random = new Random();
         int i = random.nextInt(101);

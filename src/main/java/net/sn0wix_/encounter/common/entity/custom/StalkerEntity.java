@@ -16,7 +16,7 @@ public class StalkerEntity extends JumpscaringEntity<StalkerEntity> {
     public static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("animation.stalker.run");
     public static final RawAnimation SCARE_ANIM = RawAnimation.begin().thenPlay("animation.stalker.scare");
     public static final RawAnimation SLEEP_ANIM = RawAnimation.begin().thenPlayAndHold("animation.stalker.sleep");
-    public static final RawAnimation WAKEUP_ANIM = RawAnimation.begin().thenPlay("animation.stalker.wakeup");
+    public static final RawAnimation WAKE_UP_ANIM = RawAnimation.begin().thenPlay("animation.stalker.wakeup");
 
     public static final TrackedData<Boolean> SLEEPING = DataTracker.registerData(StalkerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
@@ -27,7 +27,7 @@ public class StalkerEntity extends JumpscaringEntity<StalkerEntity> {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
         controllerRegistrar.add(new AnimationController<>(this, "controller", 2, this::predicate)
-                .triggerableAnim("scare", getScareAnim()));
+                .triggerableAnim("scare", getScareAnim()).triggerableAnim("wake_up", WAKE_UP_ANIM));
     }
 
     @Override
@@ -47,6 +47,10 @@ public class StalkerEntity extends JumpscaringEntity<StalkerEntity> {
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(SLEEPING, false);
+    }
+
+    public void startWakeUpAnim() {
+        this.triggerAnim("controller", "wake_up");
     }
 
     @Override

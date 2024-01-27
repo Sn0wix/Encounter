@@ -12,7 +12,7 @@ public class StartScareAnimCommand {
         dispatcher.register(CommandManager.literal("start_scare_anim_all").executes(StartScareAnimCommand::run));
     }
 
-    private static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
+    public static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
         serverCommandSourceCommandContext.getSource().getWorld().iterateEntities().forEach(entity -> {
             if (entity instanceof JumpscaringEntity jumpscaringEntity) {
                 jumpscaringEntity.startScareAnim();

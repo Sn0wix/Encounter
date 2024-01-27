@@ -14,14 +14,11 @@ public class Encounter implements ModInitializer {
 	//TODO 3 monsters
 	//TODO vent block
 	//TODO (disable shift when cut scene)
-	//TODO disable jump + command
 	//TODO idea: secret ratafak skin
 	//TODO crawl key(x)
-	//TODO custom command for stalker sleep
 	//TODO add a config file that saves hash maps and variables
 	//TODO return from f5 when scaring
 	//TODO auto options
-	//TODO boss bar rendering
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Encounter.MOD_ID);
 	public static final String MOD_ID = "encounter";

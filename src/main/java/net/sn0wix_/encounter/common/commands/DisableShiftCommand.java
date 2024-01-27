@@ -14,7 +14,7 @@ public class DisableShiftCommand {
         dispatcher.register(CommandManager.literal("disable_shift").then(CommandManager.argument("disable", BoolArgumentType.bool()).executes(DisableShiftCommand::run)));
     }
 
-    private static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
+    public static int run(CommandContext<ServerCommandSource> serverCommandSourceCommandContext) {
         boolean disable = BoolArgumentType.getBool(serverCommandSourceCommandContext, "disable");
 
         if (disable) {
