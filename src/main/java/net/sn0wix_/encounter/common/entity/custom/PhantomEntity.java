@@ -16,7 +16,8 @@ import software.bernie.geckolib.core.object.PlayState;
 public class PhantomEntity extends JumpscaringEntity<PhantomEntity> {
     public static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("animation.phantom.idle");
     public static final RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("animation.phantom.walk");
-    public static final RawAnimation SCARE_ANIM = RawAnimation.begin().thenLoop("animation.phantom.scare");
+    public static final RawAnimation SCARE_ANIM = RawAnimation.begin().thenPlay("animation.phantom.scare");
+    public static final RawAnimation SCARE_ANIM_LOOP = RawAnimation.begin().thenLoop("animation.phantom.scare");
 
     public PhantomEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -42,7 +43,7 @@ public class PhantomEntity extends JumpscaringEntity<PhantomEntity> {
 
     public PlayState scarePredicate(AnimationState<PhantomEntity> state) {
         if (this.dataTracker.get(SCARING)) {
-            return state.setAndContinue(SCARE_ANIM);
+            return state.setAndContinue(SCARE_ANIM_LOOP);
         }
 
         return PlayState.STOP;

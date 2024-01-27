@@ -11,17 +11,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Encounter implements ModInitializer {
-	//TODO 5 monsters
+	//TODO 3 monsters
 	//TODO vent block
 	//TODO (disable shift when cut scene)
 	//TODO disable jump + command
 	//TODO idea: secret ratafak skin
 	//TODO crawl key(x)
-	//TODO stalker sleep
-	//TODO add new "pumpkin"
+	//TODO custom command for stalker sleep
 	//TODO add a config file that saves hash maps and variables
-	//TODO return to f1 when scaring
+	//TODO return from f5 when scaring
 	//TODO auto options
+	//TODO boss bar rendering
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Encounter.MOD_ID);
 	public static final String MOD_ID = "encounter";
