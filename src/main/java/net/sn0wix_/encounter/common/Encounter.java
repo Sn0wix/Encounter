@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 public class Encounter implements ModInitializer {
 	//TODO fix jumping/sneaking when crawling
 	//TODO 3 monsters
-	//TODO vent block
-	//TODO (disable shift when cut scene)
 	//TODO idea: secret ratafak skin
 	//TODO add a config file that saves hash maps and variables
 	//TODO return from f5 when scaring

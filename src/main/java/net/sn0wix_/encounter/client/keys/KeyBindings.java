@@ -1,4 +1,4 @@
-package net.sn0wix_.encounter.client.keyBindings;
+package net.sn0wix_.encounter.client.keys;
 
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;

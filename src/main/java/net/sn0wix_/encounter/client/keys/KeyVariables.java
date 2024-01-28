@@ -1,4 +1,4 @@
-package net.sn0wix_.encounter.client.keyBindings;
+package net.sn0wix_.encounter.client.keys;
 
 import net.sn0wix_.encounter.client.util.ClientVariables;
 

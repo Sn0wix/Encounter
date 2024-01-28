@@ -18,6 +18,7 @@ public class CustomHelpCommand {
                 Commandy:
                 Zamknutí mezerníku: /disable_jump <true/false>
                 Zamknutí shiftu: /disable_shift <true/false>
+                Zamknutí crawlu: /disable_crawl <true/false>
                 Povolení renderivání boss baru: /render_boss_bar <true/false>
                 Náhodná generace: /random <šance v %>
                 Zapnutí animace jumpscaru: /start_scare_anim_all

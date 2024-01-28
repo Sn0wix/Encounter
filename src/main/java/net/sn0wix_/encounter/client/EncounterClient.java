@@ -4,7 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.sn0wix_.encounter.client.event.ClientTickEvent;
-import net.sn0wix_.encounter.client.keyBindings.KeyBindings;
+import net.sn0wix_.encounter.client.keys.KeyBindings;
 import net.sn0wix_.encounter.client.models.CrawlerModel;
 import net.sn0wix_.encounter.client.models.PhantomModel;
 import net.sn0wix_.encounter.client.models.StalkerModel;

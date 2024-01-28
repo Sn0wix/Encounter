@@ -2,7 +2,7 @@ package net.sn0wix_.encounter.mixin.common;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.PlayerEntity;
-import net.sn0wix_.encounter.client.keyBindings.KeyVariables;
+import net.sn0wix_.encounter.client.keys.KeyVariables;
 import net.sn0wix_.encounter.common.keyMaps.ServerKeyHashMap;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
