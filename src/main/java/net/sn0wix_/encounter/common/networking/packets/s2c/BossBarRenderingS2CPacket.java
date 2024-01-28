@@ -11,11 +11,11 @@ import net.sn0wix_.encounter.client.util.ClientVariables;
 import net.sn0wix_.encounter.common.networking.ModPackets;
 
 public class BossBarRenderingS2CPacket {
-    public static void reciveLock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
+    public static void recieveLock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         client.execute(() -> ClientVariables.setShouldRenderBossBar(false));
     }
 
-    public static void reciveUnlock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
+    public static void recieveUnlock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         client.execute(() -> ClientVariables.setShouldRenderBossBar(true));
     }
 

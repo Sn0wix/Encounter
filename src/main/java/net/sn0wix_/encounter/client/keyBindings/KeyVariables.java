@@ -1,5 +1,7 @@
 package net.sn0wix_.encounter.client.keyBindings;
 
+import net.sn0wix_.encounter.client.util.ClientVariables;
+
 public class KeyVariables {
     private static boolean crawlKeyPressed = false;
 
@@ -9,5 +11,7 @@ public class KeyVariables {
 
     public static void setCrawlKeyPressed(boolean pressed) {
         crawlKeyPressed = pressed;
+        ClientVariables.setJumpLocked(pressed);
+        ClientVariables.setShiftLocked(pressed);
     }
 }

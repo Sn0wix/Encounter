@@ -1,4 +1,4 @@
-package net.sn0wix_.encounter.mixin.server;
+package net.sn0wix_.encounter.mixin.common;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;

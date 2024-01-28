@@ -8,15 +8,14 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.sn0wix_.encounter.client.util.ClientVariables;
-import net.sn0wix_.encounter.common.Encounter;
 import net.sn0wix_.encounter.common.networking.ModPackets;
 
 public class PlayerDisableJumpS2CPacket {
-    public static void reciveLock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
+    public static void recieveLock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         client.execute(() -> ClientVariables.setJumpLocked(true));
     }
 
-    public static void reciveUnlock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
+    public static void recieveUnlock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         client.execute(() -> ClientVariables.setJumpLocked(false));
     }
 

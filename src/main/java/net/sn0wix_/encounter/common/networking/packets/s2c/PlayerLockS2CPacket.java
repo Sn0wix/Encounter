@@ -14,14 +14,14 @@ import net.sn0wix_.encounter.common.util.ServerVariables;
 import org.joml.Vector3f;
 
 public class PlayerLockS2CPacket {
-    public static void reciveLock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
+    public static void recieveLock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         ClientVariables.lockPlayer();
         ClientVariables.setScarePos(new Vec3d(packetByteBuf.readVector3f()));
 
         client.executeSync(() -> client.getSoundManager().stopAll());
     }
 
-    public static void reciveUnlock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
+    public static void recieveUnlock(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         ClientVariables.unlockPlayer();
         ClientVariables.setScarePos(null);
     }

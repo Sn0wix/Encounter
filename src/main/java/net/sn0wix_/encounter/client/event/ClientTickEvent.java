@@ -6,13 +6,15 @@ import net.minecraft.entity.EntityPose;
 import net.minecraft.text.Text;
 import net.sn0wix_.encounter.client.keyBindings.KeyVariables;
 import net.sn0wix_.encounter.client.util.ClientVariables;
-
-import java.security.Key;
+import net.sn0wix_.encounter.common.Encounter;
+import net.sn0wix_.encounter.common.networking.packets.c2s.CrawlC2SPacket;
 
 import static net.sn0wix_.encounter.client.keyBindings.KeyBindings.crawlKey;
 
 public class ClientTickEvent {
     public static class EndClientTick implements ClientTickEvents.EndTick {
+        private static boolean wasCrawlKeyPressed = false;
+
         @Override
         public void onEndTick(MinecraftClient client) {
             stopMoving(client);
@@ -25,18 +27,16 @@ public class ClientTickEvent {
 
         private static void handleKeyInputs(MinecraftClient client) {
             if (client.player != null) {
-                if (crawlKey.isPressed() && !crawlKey.wasPressed() && !KeyVariables.isCrawlKeyPressed()) {
-                    client.player.sendMessage(Text.of("pressed"));
+                if (crawlKey.isPressed() && !KeyVariables.isCrawlKeyPressed()) {
                     KeyVariables.setCrawlKeyPressed(true);
-                } else if (!crawlKey.isPressed() && crawlKey.wasPressed() && KeyVariables.isCrawlKeyPressed()) {
-                    client.player.sendMessage(Text.of("released"));
-                    KeyVariables.setCrawlKeyPressed(false);
                 } else if (!crawlKey.isPressed() && KeyVariables.isCrawlKeyPressed()) {
                     KeyVariables.setCrawlKeyPressed(false);
                 }
 
-                client.player.sendMessage(Text.of("is pressed " + crawlKey.isPressed()));
-                client.player.sendMessage(Text.of("was pressed " + crawlKey.wasPressed()));
+                if (KeyVariables.isCrawlKeyPressed() != wasCrawlKeyPressed) {
+                    CrawlC2SPacket.send(KeyVariables.isCrawlKeyPressed());
+                    wasCrawlKeyPressed = KeyVariables.isCrawlKeyPressed();
+                }
             }
         }
     }
