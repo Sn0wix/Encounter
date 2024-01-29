@@ -12,6 +12,7 @@
   },
   "client": [
     "client.BossBarRenderingMixin",
+    "client.GameOptionsMixin",
     "client.InGameHudMixin",
     "client.KeyboardMixin",
     "client.MouseMixin"
