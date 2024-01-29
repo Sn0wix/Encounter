@@ -22,8 +22,6 @@ public class Encounter implements ModInitializer {
 	//TODO 3 monsters
 	//TODO idea: secret ratafak skin
 	//TODO add a config file that saves hash maps and variables
-	//TODO return from f5 when scaring
-	//TODO auto options
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Encounter.MOD_ID);
 	public static final String MOD_ID = "encounter";
