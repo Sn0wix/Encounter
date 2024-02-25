@@ -24,6 +24,7 @@ public class ModRegistries {
         CommandRegistrationCallback.EVENT.register(DisableJumpCommand::register);
         CommandRegistrationCallback.EVENT.register(DisableShiftCommand::register);
         CommandRegistrationCallback.EVENT.register(DisableCrawlCommand::register);
+        CommandRegistrationCallback.EVENT.register(DisableF5Command::register);
         CommandRegistrationCallback.EVENT.register(StopRenderingBossBarCommand::register);
 
 

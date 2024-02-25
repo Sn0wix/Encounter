@@ -9,7 +9,7 @@ import static net.sn0wix_.encounter.client.keys.KeyBindings.crawlKey;
 public class KeyInputHandler {
     private static boolean wasCrawlKeyPressed = false;
 
-    public static void handleInputs(MinecraftClient client) {
+    public static void handleInput(MinecraftClient client) {
         if (client.player != null && !ClientVariables.isCrawlLocked()) {
             if (crawlKey.isPressed() && !KeyVariables.isCrawlKeyPressed()) {
                 KeyVariables.setCrawlKeyPressed(true);

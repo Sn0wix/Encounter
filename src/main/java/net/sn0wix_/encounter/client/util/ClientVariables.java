@@ -7,6 +7,7 @@ public class ClientVariables {
     private static boolean jumpLocked = false;
     private static boolean shiftLocked = false;
     private static boolean crawlLocked = false;
+    private static boolean f5Locked = false;
     private static boolean shouldRenderBossBar = true;
     private static Vec3d scarePos = null;
 
@@ -20,6 +21,10 @@ public class ClientVariables {
 
     public static void setShiftLocked(boolean shiftLocked) {
         ClientVariables.shiftLocked = shiftLocked;
+    }
+
+    public static void setF5Locked(boolean f5Locked) {
+        ClientVariables.f5Locked = f5Locked;
     }
 
     public static void setShouldRenderBossBar(boolean shouldRenderBossBar) {
@@ -37,7 +42,9 @@ public class ClientVariables {
     public static boolean isShiftLocked() {
         return shiftLocked;
     }
-
+    public static boolean isF5Locked() {
+        return f5Locked;
+    }
     public static boolean isCrawlLocked() {
         return crawlLocked;
     }

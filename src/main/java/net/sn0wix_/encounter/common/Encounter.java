@@ -33,6 +33,7 @@ public class Encounter implements ModInitializer {
 			GameOptionsFileWriter.run();
 		}catch (IOException e) {
 			LOGGER.error(Marker.ANY_MARKER, "Can not create " + NEW_GAME_OPTIONS_FILE_NAME, new RuntimeException(e));
+			throw new RuntimeException(e);
 		}
 
 		ModItemGroup.registerModItemGroups();

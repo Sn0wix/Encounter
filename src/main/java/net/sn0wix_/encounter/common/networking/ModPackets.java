@@ -20,6 +20,9 @@ public class ModPackets {
     public static final Identifier LOCK_CRAWL = new Identifier(Encounter.MOD_ID, "lock_crawl");
     public static final Identifier UNLOCK_CRAWL = new Identifier(Encounter.MOD_ID, "unlock_crawl");
 
+    public static final Identifier LOCK_F5 = new Identifier(Encounter.MOD_ID, "lock_f5");
+    public static final Identifier UNLOCK_F5 = new Identifier(Encounter.MOD_ID, "unlock_f5");
+
     public static final Identifier STOP_RENDERING_BOSS_BAR = new Identifier(Encounter.MOD_ID, "stop_rendering_boss_bar");
     public static final Identifier START_RENDERING_BOSS_BAR = new Identifier(Encounter.MOD_ID, "start_rendering_boss_bar");
 
@@ -40,6 +43,9 @@ public class ModPackets {
 
         ClientPlayNetworking.registerGlobalReceiver(LOCK_SHIFT, PlayerDisableShiftS2CPacket::recieveLock);
         ClientPlayNetworking.registerGlobalReceiver(UNLOCK_SHIFT, PlayerDisableShiftS2CPacket::recieveUnlock);
+
+        ClientPlayNetworking.registerGlobalReceiver(LOCK_F5, PlayerDisableF5S2CPacket::recieveLock);
+        ClientPlayNetworking.registerGlobalReceiver(UNLOCK_F5, PlayerDisableF5S2CPacket::recieveUnlock);
 
         ClientPlayNetworking.registerGlobalReceiver(LOCK_CRAWL, PlayerDisableCrawlS2CPacket::recieveLock);
         ClientPlayNetworking.registerGlobalReceiver(UNLOCK_CRAWL, PlayerDisableCrawlS2CPacket::recieveUnlock);

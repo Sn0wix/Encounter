@@ -11,7 +11,7 @@ public class KeyVariables {
 
     public static void setCrawlKeyPressed(boolean pressed) {
         crawlKeyPressed = pressed;
-        ClientVariables.setJumpLocked(pressed);
-        ClientVariables.setShiftLocked(pressed);
+        //ClientVariables.setJumpLocked(pressed);
+        //ClientVariables.setShiftLocked(pressed);
     }
 }

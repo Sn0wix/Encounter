@@ -47,7 +47,7 @@ public class GameOptionsFileWriter {
 
     //remove \n
     private static String checkStringForEditableOptions(String s) {
-        if (s.contains("fov:")) {
+        /*if (s.contains("fov:")) {
             return "fov:0.0\\n";
         } else if (s.contains("renderDistance:")) {
             int i = getIntFromTo(15, s.length() - 1, s);
@@ -57,7 +57,7 @@ public class GameOptionsFileWriter {
             } else {
                 return "renderDistance:20\\n";
             }
-        }
+        }*/
 
         return s;
     }
