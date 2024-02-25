@@ -8,11 +8,11 @@ import net.sn0wix_.encounter.client.util.ClientVariables;
 
 public class ClientTickEvent {
     public static class EndClientTick implements ClientTickEvents.EndTick {
-
         @Override
         public void onEndTick(MinecraftClient client) {
             handleScareMovement(client);
             KeyInputHandler.handleInput(client);
+
 
             if (ClientVariables.isPlayerLocked() || ClientVariables.isF5Locked()) {
                 handleF5(client);
